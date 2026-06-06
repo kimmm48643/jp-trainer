@@ -578,8 +578,12 @@ const GENERAL_TIME_FRAMES = [
   '어릴 때와 비교해서',
   '부모 세대와 비교해서',
   '10~20년 전과 비교해서',
+  '앞으로 몇 년 안에',
   '가까운 미래에',
   '10년 뒤에',
+  '기술이 더 발전하면',
+  'SNS 문화가 더 바뀐다면',
+  '일본 사회가 더 고령화된다면',
   '2040년쯤에'
 ];
 const HISTORICAL_TIME_FRAMES = [
@@ -612,14 +616,14 @@ const PERSPECTIVES_BY_CATEGORY = {
   '경제': ['개인', '청년', '가족', '회사', '창업자', '정부', '사회', '한국인', '일본인'],
   '사회': ['개인', '친구', '가족', '청년', '노인', '아이', '정부', '사회', '외국인'],
   '세계': ['개인', '한국인', '일본인', '외국인', '정부', '사회', '언론', '청년'],
-  '스포츠': ['개인', '친구', '청년', '노인', '회사', '사회', '일본인', '한국인'],
-  '문화': ['개인', '친구', '청년', '일본인', '한국인', '외국인', '회사', '창작자'],
+  '스포츠': ['개인', '친구', '청년', '노인', '사회', '일본인', '한국인'],
+  '문화': ['개인', '친구', '청년', '일본인', '한국인', '외국인', '창작자'],
   '여행': ['개인', '친구', '연인', '가족', '청년', '노인', '외국인', '일본인', '지역사회'],
-  '취미': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '창작자'],
-  '삶': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '사회'],
+  '취미': ['개인', '친구', '연인', '가족', '청년', '노인', '창작자'],
+  '삶': ['개인', '친구', '가족', '청년', '노인', '사회'],
   '테크': ['개인', '친구', '가족', '청년', '노인', '회사', '정부', '사회', '기술'],
   '연애': ['개인', '친구', '연인', '가족', '청년', '사회', '일본인', '한국인'],
-  '음식': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '지역사회']
+  '음식': ['개인', '친구', '연인', '가족', '청년', '노인', '지역사회']
 };
 const EMOTIONS = ['기대', '걱정', '후회', '불편함', '감사', '분노', '호기심', '외로움', '자부심', '불안'];
 
@@ -751,12 +755,12 @@ function pickTimeFrame(category, microTopic) {
   }
 
   const canUseHistory = HISTORY_FRIENDLY_CATEGORIES.includes(category);
-  if (canUseHistory && Math.random() < 0.18) {
+  if (canUseHistory && Math.random() < 0.32) {
     return { label: randomFrom(HISTORICAL_TIME_FRAMES_BY_CATEGORY[category] || HISTORICAL_TIME_FRAMES), type: 'historical' };
   }
 
   const label = randomFrom(GENERAL_TIME_FRAMES);
-  if (label.includes('미래') || label.includes('뒤') || label.includes('2040')) {
+  if (label.includes('미래') || label.includes('뒤') || label.includes('2040') || label.includes('앞으로') || label.includes('발전하면') || label.includes('바뀐다면') || label.includes('고령화')) {
     return { label, type: 'future' };
   }
   if (label.includes('전') || label.includes('어릴 때') || label.includes('부모 세대')) {
