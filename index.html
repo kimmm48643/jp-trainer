@@ -624,7 +624,7 @@ async function generateTopic(mode) {
   const pickedFree = catHint || freeTopics[Math.floor(Math.random() * freeTopics.length)];
   const pickedBiz = bizTopics[Math.floor(Math.random() * bizTopics.length)];
   const systemPrompt = mode==='free'
-    ? `오늘의 주제: ${pickedFree}. 이 테마로 일본어 즉흥 발화 연습 주제를 하나 만들어줘. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
+   ? `[seed:${Date.now()}] 오늘의 주제 카테고리: ${pickedFree}. 이 카테고리 안에서 매번 완전히 다른 각도로 질문을 만들어줘. 문화라면(영화/음악/패션/서브컬처/팝컬처/독서 등), 세계라면(최신뉴스/세계사/특정나라/국제관계/문화차이 등), 경제라면(재테크/물가/취업/부동산/소비트렌드 등), 사회라면(젠더/세대갈등/교육/복지/범죄 등). 절대 같은 질문 반복 금지. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
 반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
 {"jp":"일본어 주제(질문형, 60자 이내)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`
     : `오늘의 유형: ${pickedBiz}. 한국에서 일본 시장을 담당하는 마케터를 채용하는 면접 상황. N2~N1 수준, 자연스러운 경어로.
