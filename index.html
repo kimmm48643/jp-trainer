@@ -44,7 +44,6 @@
     padding-bottom: 80px;
   }
 
-  /* ── TOP NAV ── */
   .top-nav {
     width: 100%;
     max-width: 520px;
@@ -76,7 +75,6 @@
   }
   .streak-n { color: var(--free); font-size: 16px; font-weight: 400; }
 
-  /* ── MODE TABS ── */
   .mode-tabs {
     width: 100%;
     max-width: 520px;
@@ -114,7 +112,6 @@
   }
   .tab.active-biz .tab-label { color: var(--biz); font-weight: 400; }
 
-  /* ── MAIN ── */
   .main {
     width: 100%;
     max-width: 520px;
@@ -130,7 +127,6 @@
     margin-bottom: 16px;
   }
 
-  /* ── CATEGORY BAR ── */
   .cat-bar {
     display: flex;
     gap: 6px;
@@ -157,25 +153,6 @@
     color: var(--free);
   }
 
-  /* ── CARD BASE ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 22px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  }
-  .card-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-
-  /* ── TOPIC CARD ── */
   .topic-card {
     background: var(--surface);
     border-radius: 10px;
@@ -214,6 +191,22 @@
     line-height: 1.5;
     margin-bottom: 12px;
   }
+  .topic-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+  .topic-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.68);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
   .topic-hint {
     font-size: 12px;
     color: var(--muted);
@@ -241,7 +234,6 @@
   .regen-btn.loading { animation: spin 0.7s linear infinite; pointer-events: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* loading */
   .topic-loading {
     display: flex;
     flex-direction: column;
@@ -265,7 +257,6 @@
   .dot-loader span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-7px)} }
 
-  /* ── WORDS CARD ── */
   .words-card {
     border-radius: 10px;
     padding: 20px 22px;
@@ -292,7 +283,6 @@
   .word-reading { font-size: 10px; color: var(--muted2); font-family: 'DM Mono', monospace; margin-bottom: 2px; }
   .word-meaning { font-size: 11px; color: var(--muted); }
 
-  /* ── TIMER ── */
   .timer-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -359,7 +349,6 @@
   .btn-reset:hover { color: var(--text); border-color: var(--border2); }
   .btn:disabled { opacity: 0.35; cursor: default; }
 
-  /* ── CHECKLIST ── */
   .check-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -401,7 +390,6 @@
   }
   .check-item.done .checkbox { background: var(--green); border-color: var(--green); color: white; }
 
-  /* ── COMPLETE ── */
   .complete-banner {
     background: var(--green-bg);
     border: 1px solid var(--green);
@@ -417,7 +405,6 @@
   .complete-banner.show { display: block; }
   .complete-banner strong { font-size: 15px; display: block; margin-bottom: 4px; }
 
-  /* ── RULES ── */
   .rules-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -484,7 +471,6 @@
 <div class="main">
   <div class="date-strip" id="dateStrip"></div>
 
-  <!-- FREE MODE -->
   <div id="freeMode">
     <div class="cat-bar" id="catBar"></div>
     <div class="topic-card mode-free" id="freeTopicCard">
@@ -500,7 +486,6 @@
     </div>
   </div>
 
-  <!-- BIZ MODE -->
   <div id="bizMode" style="display:none">
     <div class="topic-card mode-biz" id="bizTopicCard">
       <span class="topic-badge badge-biz" id="bizBadge">비즈니스/면접</span>
@@ -515,7 +500,6 @@
     </div>
   </div>
 
-  <!-- TIMER -->
   <div class="timer-card mode-free" id="timerCard">
     <div class="timer-progress free" id="timerProgress"></div>
     <div class="timer-display" id="timerDisplay">3:00</div>
@@ -526,7 +510,6 @@
     </div>
   </div>
 
-  <!-- CHECKLIST -->
   <div class="check-card">
     <div class="check-title">Today's Checklist</div>
     <div class="check-item" id="c1" onclick="toggleCheck('c1')"><div class="checkbox" id="cb1"></div><span>🎙 3분 독백 완료</span></div>
@@ -550,6 +533,32 @@
 
 <script>
 const CATEGORIES = ['🎲 랜덤','정치','경제','사회','세계','스포츠','문화','여행','취미','삶','테크','연애','음식'];
+const RECENT_TOPIC_KEY = 'jpTrainer_recentTopicSeeds';
+const RECENT_TOPIC_LIMIT = 30;
+
+const TIME_FRAMES = ['10년 전', '최근 5년', '현재', '가까운 미래', '2040년', '세대 변화 속에서', '일본과 한국의 변화 속에서'];
+const THINKING_ANGLES = ['찬반토론', '비교', '원인분석', '문제해결', '미래예측', '개인경험', '가상상황', '가치판단'];
+const PERSPECTIVES = ['개인', '친구', '연인', '가족', '회사', '창업자', '정부', '사회', '외국인', '일본인', '한국인', '노인', '청년', '아이', '환경', '기술'];
+const EMOTIONS = ['기대', '걱정', '후회', '불편함', '감사', '분노', '호기심', '외로움', '자부심', '불안'];
+
+const TOPIC_POOL = {
+  '정치': ['선거연령', '정치 유튜브', '청년 정치인', '지방자치', '외교 갈등', '복지 예산', '언론 신뢰', '시민운동', '정치 무관심', '온라인 여론'],
+  '경제': ['편의점 물가', '부동산 월세', '주식 투자', '암호화폐', '최저임금', '중고거래', '구독 서비스', '무인 매장', '스타트업', '소비 양극화'],
+  '사회': ['1인 가구', '저출산', '고령화', '플랫폼 노동', '외국인 노동자', '세대 갈등', '학교 폭력', '지방 소멸', '성별 역할', '공정성 논쟁'],
+  '세계': ['일본 생활문화', '한국 이미지', '미국 대선', '중국 플랫폼', '유럽 복지', '동남아 여행', '국제결혼', '전쟁 뉴스', '이민 정책', '문화 차이'],
+  '스포츠': ['러닝 모임', '헬스장 문화', '축구 팬덤', '야구 응원', 'e스포츠', '올림픽 개최', '여성 스포츠', '등산 열풍', '운동 앱', '선수 사생활'],
+  '문화': ['OTT 드라마', '아이돌 팬덤', '웹툰', '독서 모임', '전시회', '일본 애니', '숏폼 영상', '패션 유행', '게임 문화', '노래방'],
+  '여행': ['혼자 여행', '무계획 여행', '게스트하우스', '지역 축제', '공항 스트레스', '여행 브이로그', '워케이션', '온천 여행', '여행 예산', '관광지 매너'],
+  '취미': ['필름카메라', '요리 클래스', '식물 키우기', '보드게임', '러닝 크루', '다이어리 꾸미기', '악기 연습', '캠핑 장비', '카페 투어', '봉사활동'],
+  '삶': ['퇴사 고민', '번아웃', '아침 루틴', '친구와 거리감', '부모님과 대화', '혼자 사는 삶', '행복의 기준', '실패 경험', '나이 드는 것', '돈과 자유'],
+  '테크': ['AI 번역앱', '스마트폰 중독', '딥페이크', '무인 계산대', '자율주행', '스마트홈', '웨어러블', '온라인 수업', 'AI 면접', '개인정보'],
+  '연애': ['소개팅 앱', '장거리 연애', '결혼관', '비혼주의', '데이트 비용', '이별 후 관계', '국제연애', '친구 같은 연애', '연애와 일', 'SNS 질투'],
+  '음식': ['혼밥', '배달앱', '편의점 도시락', '카페 공부', '비건 식당', '먹방', '무인 식당', '급식 추억', '야식 문화', '지역 맛집']
+};
+
+const BIZ_TOPIC_POOL = ['자기소개/경력요약', '지원동기/회사선택이유', '한국vs일본시장차이', '앞으로 하고 싶은 마케팅', '주목한 마케팅 레퍼런스', '강점/약점', '성과/실적', '실패경험', '팀워크/갈등해결', '커리어비전', '업무스타일', '트러블슈팅'];
+const BIZ_CONTEXTS = ['일본 시장 담당 마케터', '한국 브랜드의 일본 진출', 'SNS 캠페인 기획', '인플루언서 협업', '신제품 런칭', '매출 부진 개선', '고객 불만 대응', '면접 최종 질문'];
+
 let currentMode = 'free';
 let selectedCat = '🎲 랜덤';
 let timerInterval = null, timeLeft = 180, isRunning = false;
@@ -610,6 +619,116 @@ function switchMode(mode) {
   resetTimer();
 }
 
+function randomFrom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function getRecentTopicSeeds() {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_TOPIC_KEY) || '[]');
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveRecentTopicSeed(seed) {
+  const recent = getRecentTopicSeeds();
+  const next = [seed, ...recent].slice(0, RECENT_TOPIC_LIMIT);
+  localStorage.setItem(RECENT_TOPIC_KEY, JSON.stringify(next));
+}
+
+function topicSignature(seed) {
+  return [seed.mode, seed.category, seed.microTopic, seed.perspective, seed.thinkingAngle].join('|');
+}
+
+function pickFreeCategory() {
+  if (selectedCat !== '🎲 랜덤') return selectedCat;
+  return randomFrom(Object.keys(TOPIC_POOL));
+}
+
+function createTopicSeed(mode) {
+  if (mode === 'biz') {
+    return {
+      mode,
+      category: '비즈니스/면접',
+      microTopic: randomFrom(BIZ_TOPIC_POOL),
+      timeFrame: randomFrom(['현재 면접 상황', '입사 후 3개월', '일본 시장 진출 초기', '성과가 필요한 시점', '문제가 발생한 직후']),
+      perspective: randomFrom(['지원자', '면접관', '팀 리더', '일본 고객', '한국 본사', '현지 파트너']),
+      thinkingAngle: randomFrom(['구체적 사례', '문제해결', '비교', '성과 설명', '우선순위 판단', '리스크 대응']),
+      emotion: randomFrom(['자신감', '솔직함', '책임감', '긴장감', '성장 의지']),
+      context: randomFrom(BIZ_CONTEXTS)
+    };
+  }
+
+  const category = pickFreeCategory();
+  return {
+    mode,
+    category,
+    microTopic: randomFrom(TOPIC_POOL[category]),
+    timeFrame: randomFrom(TIME_FRAMES),
+    perspective: randomFrom(PERSPECTIVES),
+    thinkingAngle: randomFrom(THINKING_ANGLES),
+    emotion: randomFrom(EMOTIONS)
+  };
+}
+
+function createUniqueTopicSeed(mode) {
+  const recentSignatures = new Set(getRecentTopicSeeds().map(topicSignature));
+
+  for (let i = 0; i < 80; i++) {
+    const seed = createTopicSeed(mode);
+    if (!recentSignatures.has(topicSignature(seed))) return seed;
+  }
+
+  return createTopicSeed(mode);
+}
+
+function buildTopicPrompt(seed) {
+  if (seed.mode === 'biz') {
+    return `아래 요소를 반드시 모두 반영해서 일본어 면접/업무 스피킹 질문 1개를 만들어줘.
+
+상황: 한국에서 일본 시장을 담당하는 마케터를 채용하는 면접
+업무 맥락: ${seed.context}
+질문 유형: ${seed.microTopic}
+시간/상황: ${seed.timeFrame}
+관점: ${seed.perspective}
+사고방식: ${seed.thinkingAngle}
+말투 감정: ${seed.emotion}
+
+규칙:
+- Claude가 새로운 주제를 고르지 말고 위 요소만 조합할 것
+- 질문은 일본어 경어체로 자연스럽게 쓸 것
+- 너무 일반적인 질문 금지
+- 실제 면접에서 바로 나올 법한 질문으로 만들 것
+- jp는 60자 이내
+- hint에는 어떤 구조로 답하면 좋은지 한국어로 알려줄 것
+
+반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
+{"jp":"면접/업무 질문(격식체, 60자 이내)","ko":"한국어번역","hint":"답변 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"}]}`;
+  }
+
+  return `아래 요소를 반드시 모두 반영해서 일본어 즉흥 발화 연습 질문 1개를 만들어줘.
+
+카테고리: ${seed.category}
+시간축: ${seed.timeFrame}
+세부주제: ${seed.microTopic}
+관점: ${seed.perspective}
+사고방식: ${seed.thinkingAngle}
+감정축: ${seed.emotion}
+
+규칙:
+- Claude가 새로운 주제를 고르지 말고 위 요소만 조합할 것
+- 질문 안에 세부주제와 관점이 자연스럽게 드러나야 함
+- 너무 일반적인 질문 금지
+- N2~N1 수준, 실제 일본 20~30대가 말할 법한 자연스러운 질문형
+- 본인 의견을 3분 말할 수 있는 질문으로 만들 것
+- jp는 60자 이내
+- hint에는 3분 동안 말할 수 있는 답변 흐름을 한국어로 알려줄 것
+
+반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
+{"jp":"일본어 주제(질문형, 60자 이내)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`;
+}
+
 async function generateTopic(mode) {
   const contentEl = document.getElementById(mode+'TopicContent');
   const wordsCard = document.getElementById(mode+'WordsCard');
@@ -618,37 +737,8 @@ async function generateTopic(mode) {
   wordsCard.style.display = 'none';
   regenBtn.classList.add('loading');
 
-  const freeTopics = ['정치/사회이슈','경제/돈','음식/맛집','여행/장소','스포츠/운동','연애/인간관계','환경/미래','문화/예술','인생관/가치관','취미/일상','세계뉴스','라이프스타일','테크/가젯'];
-  const bizTopics = ['자기소개/경력요약','지원동기/회사선택이유','한국vs일본시장차이','앞으로하고싶은마케팅','주목한마케팅레퍼런스','강점/약점','성과/실적','실패경험','팀워크/갈등해결','커리어비전','업무스타일','트러블슈팅'];
-  const catHint = mode==='free' && selectedCat!=='🎲 랜덤' ? selectedCat : '';
-  const pickedFree = catHint || freeTopics[Math.floor(Math.random() * freeTopics.length)];
-  const pickedBiz = bizTopics[Math.floor(Math.random() * bizTopics.length)];
-  const systemPrompt = mode==='free'
-   ? `카테고리: ${pickedFree}
-x축(시간대): ${['현재트렌드','최근5년','10년전','수십년전','미래예측','실시간뉴스','역사적사건'][Math.floor(Math.random()*7)]}
-y축(세부주제): ${{
-  '정치/사회이슈':['선거','외교','복지정책','젠더','세대갈등','언론','환경정책','국방','지방자치','시민운동'],
-  '경제/돈':['재테크','물가','취업','부동산','암호화폐','소비트렌드','스타트업','양극화','최저임금','주식'],
-  '음식/맛집':['요리트렌드','배달문화','카페문화','다이어트식','술문화','편의점음식','채식','지역음식','푸드테크','먹방'],
-  '여행/장소':['국내여행','해외여행','혼행','캠핑','도시탐방','숙박트렌드','여행앱','관광지','여행경비','여행목적'],
-  '스포츠/운동':['헬스','야구','축구','올림픽','e스포츠','러닝','등산','수영','스포츠비즈니스','선수'],
-  '연애/인간관계':['연애앱','결혼관','친구관계','가족관계','직장관계','SNS관계','이별','솔로문화','국제연애','세대차이'],
-  '환경/미래':['기후변화','탄소중립','채식주의','재활용','에너지','미래기술','인구문제','도시화','자연재해','지속가능성'],
-  '문화/예술':['영화','음악','패션','게임','서브컬처','SNS문화','독서','미술전시','유튜브','팝컬처'],
-  '인생관/가치관':['행복론','성공의미','종교','죽음','자유','책임','도덕','꿈','후회','감사'],
-  '취미/일상':['독서','요리','게임','운동','여행','반려동물','DIY','명상','수집','봉사'],
-  '세계뉴스':['미국','중국','유럽','중동','아프리카','동남아','일본','한국','국제기구','전쟁분쟁'],
-  '라이프스타일':['미니멀리즘','워라밸','1인가구','재택근무','SNS생활','소비패턴','주거','루틴','웰빙','자기계발'],
-  '테크/가젯':['스마트폰','AI가전','웨어러블','앱트렌드','SNS플랫폼','게임기','카메라','자동차기술','스마트홈','구독서비스']
-}[pickedFree]?.[Math.floor(Math.random()*10)] || pickedFree}
-z축(질문각도): ${['찬반토론형','본인경험형','구조분석형','미래상상형','비교형','공감형'][Math.floor(Math.random()*6)]}
-
-위 x/y/z 조합으로 일본어 즉흥 발화 연습 주제를 하나 만들어줘. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로. 이 카테고리 안에서 매번 완전히 다른 각도로 질문을 만들어줘. 문화라면(영화/음악/패션/서브컬처/팝컬처/독서 등), 세계라면(최신뉴스/세계사/특정나라/국제관계/문화차이 등), 경제라면(재테크/물가/취업/부동산/소비트렌드 등), 사회라면(젠더/세대갈등/교육/복지/범죄 등). 절대 같은 질문 반복 금지. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
-반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
-{"jp":"일본어 주제(질문형, 60자 이내)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`
-    : `오늘의 유형: ${pickedBiz}. 한국에서 일본 시장을 담당하는 마케터를 채용하는 면접 상황. N2~N1 수준, 자연스러운 경어로.
-반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
-{"jp":"면접/업무 질문(격식체, 60자 이내)","ko":"한국어번역","hint":"답변 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"}]}`;
+  const topicSeed = createUniqueTopicSeed(mode);
+  const systemPrompt = buildTopicPrompt(topicSeed);
   
   try {
     const res = await fetch('/.netlify/functions/claude', {
@@ -663,6 +753,8 @@ z축(질문각도): ${['찬반토론형','본인경험형','구조분석형','�
     const data = await res.json();
     const raw = data.content.map(i=>i.text||'').join('').trim();
     const topic = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    topic.seed = topicSeed;
+    saveRecentTopicSeed(topicSeed);
     renderTopic(mode, topic);
   } catch(e) {
     contentEl.innerHTML = `<div class="error-msg">생성 실패 😅 다시 시도해줘!</div>`;
@@ -676,8 +768,14 @@ function renderTopic(mode, topic) {
   const wordsList = document.getElementById(mode+'WordsList');
   const regenBtn = document.getElementById(mode+'RegenBtn');
   const badgeEl = document.getElementById(mode+'Badge');
-  badgeEl.textContent = mode==='free' && selectedCat!=='🎲 랜덤' ? selectedCat : (mode==='free'?'프리토킹':'비즈니스/면접');
-  contentEl.innerHTML = `<div class="topic-jp">${topic.jp}</div><div class="topic-ko">${topic.ko}</div><div class="topic-hint">${topic.hint}</div>`;
+  const seed = topic.seed || {};
+  const chips = [seed.timeFrame, seed.microTopic, seed.perspective, seed.thinkingAngle, seed.emotion].filter(Boolean);
+  badgeEl.textContent = mode === 'free' ? (seed.category || '프리토킹') : '비즈니스/면접';
+  contentEl.innerHTML = `
+    <div class="topic-jp">${topic.jp}</div>
+    <div class="topic-ko">${topic.ko}</div>
+    <div class="topic-meta">${chips.map(c=>`<span class="topic-chip">${c}</span>`).join('')}</div>
+    <div class="topic-hint">${topic.hint}</div>`;
   if (topic.words?.length) {
     wordsList.innerHTML = topic.words.map(w=>`<div class="word-item"><div class="word-jp">${w.jp}</div>${w.reading?`<div class="word-reading">${w.reading}</div>`:''}<div class="word-meaning">${w.meaning}</div></div>`).join('');
     wordsCard.style.display = 'block';
