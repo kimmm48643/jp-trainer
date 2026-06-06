@@ -631,7 +631,7 @@ ${catHint ? catHint+' 테마로 주제를 만들어주세요.' : '정치/경제/
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body: JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
