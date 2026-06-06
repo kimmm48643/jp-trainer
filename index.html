@@ -569,9 +569,58 @@ const CATEGORIES = ['🎲 랜덤','정치','경제','사회','세계','스포츠
 const RECENT_TOPIC_KEY = 'jpTrainer_recentTopicSeeds';
 const RECENT_TOPIC_LIMIT = 30;
 
-const TIME_FRAMES = ['10년 전', '최근 5년', '현재', '가까운 미래', '2040년', '세대 변화 속에서', '일본과 한국의 변화 속에서'];
-const THINKING_ANGLES = ['찬반토론', '비교', '원인분석', '문제해결', '미래예측', '개인경험', '가상상황', '가치판단'];
-const PERSPECTIVES = ['개인', '친구', '연인', '가족', '회사', '창업자', '정부', '사회', '외국인', '일본인', '한국인', '노인', '청년', '아이', '환경', '기술'];
+const GENERAL_TIME_FRAMES = [
+  '현재', '현재', '현재',
+  '최근 5년', '최근 5년',
+  '요즘 일본 사회에서',
+  '세대 변화 속에서',
+  '일본과 한국의 변화 속에서',
+  '어릴 때와 비교해서',
+  '부모 세대와 비교해서',
+  '10~20년 전과 비교해서',
+  '가까운 미래에',
+  '10년 뒤에',
+  '2040년쯤에'
+];
+const HISTORICAL_TIME_FRAMES = [
+  '전후 일본 사회의 변화와 연결해서',
+  '버블 경제 붕괴 이후의 분위기와 연결해서',
+  '동일본대지진 이후의 사회 변화와 연결해서',
+  '팬데믹 이후의 생활 변화와 연결해서',
+  '냉전 이후 국제관계 변화와 연결해서',
+  '911 이후 세계의 안전 인식 변화와 연결해서',
+  '태평양 전쟁의 기억과 연결해서'
+];
+const HISTORY_FRIENDLY_CATEGORIES = ['정치', '경제', '사회', '세계', '문화'];
+const HISTORICAL_TIME_FRAMES_BY_CATEGORY = {
+  '정치': ['전후 일본 사회의 변화와 연결해서', '냉전 이후 국제관계 변화와 연결해서', '911 이후 세계의 안전 인식 변화와 연결해서', '태평양 전쟁의 기억과 연결해서'],
+  '경제': ['버블 경제 붕괴 이후의 분위기와 연결해서', '팬데믹 이후의 생활 변화와 연결해서'],
+  '사회': ['전후 일본 사회의 변화와 연결해서', '동일본대지진 이후의 사회 변화와 연결해서', '팬데믹 이후의 생활 변화와 연결해서'],
+  '세계': ['냉전 이후 국제관계 변화와 연결해서', '911 이후 세계의 안전 인식 변화와 연결해서', '태평양 전쟁의 기억과 연결해서', '팬데믹 이후의 생활 변화와 연결해서'],
+  '문화': ['전후 일본 사회의 변화와 연결해서', '버블 경제 붕괴 이후의 분위기와 연결해서', '팬데믹 이후의 생활 변화와 연결해서']
+};
+const PAST_LEANING_TOPICS = ['급식 추억', '실패 경험', '부모님과 대화', '나이 드는 것', '이별 후 관계'];
+const PERSONAL_PERSPECTIVES = ['개인', '친구', '연인', '가족', '청년', '노인', '아이', '한국인', '일본인', '외국인'];
+const THINKING_ANGLES_BY_TIME = {
+  past: ['비교', '원인분석', '개인경험', '가치판단', '변화분석'],
+  present: ['찬반토론', '비교', '원인분석', '문제해결', '개인경험', '가치판단'],
+  future: ['미래예측', '가상상황', '문제해결', '가치판단', '찬반토론'],
+  historical: ['비교', '원인분석', '가치판단', '변화분석', '사회적 영향 분석']
+};
+const PERSPECTIVES_BY_CATEGORY = {
+  '정치': ['개인', '청년', '노인', '정부', '사회', '한국인', '일본인', '언론', '외국인'],
+  '경제': ['개인', '청년', '가족', '회사', '창업자', '정부', '사회', '한국인', '일본인'],
+  '사회': ['개인', '친구', '가족', '청년', '노인', '아이', '정부', '사회', '외국인'],
+  '세계': ['개인', '한국인', '일본인', '외국인', '정부', '사회', '언론', '청년'],
+  '스포츠': ['개인', '친구', '청년', '노인', '회사', '사회', '일본인', '한국인'],
+  '문화': ['개인', '친구', '청년', '일본인', '한국인', '외국인', '회사', '창작자'],
+  '여행': ['개인', '친구', '연인', '가족', '청년', '노인', '외국인', '일본인', '지역사회'],
+  '취미': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '창작자'],
+  '삶': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '사회'],
+  '테크': ['개인', '친구', '가족', '청년', '노인', '회사', '정부', '사회', '기술'],
+  '연애': ['개인', '친구', '연인', '가족', '청년', '사회', '일본인', '한국인'],
+  '음식': ['개인', '친구', '연인', '가족', '청년', '노인', '회사', '지역사회']
+};
 const EMOTIONS = ['기대', '걱정', '후회', '불편함', '감사', '분노', '호기심', '외로움', '자부심', '불안'];
 
 const TOPIC_POOL = {
@@ -696,6 +745,70 @@ function randomFrom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+function pickTimeFrame(category, microTopic) {
+  if (PAST_LEANING_TOPICS.includes(microTopic)) {
+    return { label: randomFrom(['어릴 때와 비교해서', '부모 세대와 비교해서', '10~20년 전과 비교해서', '최근 5년']), type: 'past' };
+  }
+
+  const canUseHistory = HISTORY_FRIENDLY_CATEGORIES.includes(category);
+  if (canUseHistory && Math.random() < 0.18) {
+    return { label: randomFrom(HISTORICAL_TIME_FRAMES_BY_CATEGORY[category] || HISTORICAL_TIME_FRAMES), type: 'historical' };
+  }
+
+  const label = randomFrom(GENERAL_TIME_FRAMES);
+  if (label.includes('미래') || label.includes('뒤') || label.includes('2040')) {
+    return { label, type: 'future' };
+  }
+  if (label.includes('전') || label.includes('어릴 때') || label.includes('부모 세대')) {
+    return { label, type: 'past' };
+  }
+  return { label, type: 'present' };
+}
+
+function pickPerspective(category) {
+  return randomFrom(PERSPECTIVES_BY_CATEGORY[category] || ['개인', '친구', '가족', '사회']);
+}
+
+function pickThinkingAngle(timeType, perspective) {
+  let angles = THINKING_ANGLES_BY_TIME[timeType] || THINKING_ANGLES_BY_TIME.present;
+  if (!PERSONAL_PERSPECTIVES.includes(perspective)) {
+    angles = angles.filter(angle => angle !== '개인경험');
+  }
+  return randomFrom(angles);
+}
+
+function createBizTopicSeed(mode) {
+  const microTopic = randomFrom(BIZ_TOPIC_POOL);
+  const isBasicInterview = ['자기소개/경력요약', '지원동기/회사선택이유', '커리어비전/입사 후 기여'].includes(microTopic);
+  const isInfluencer = ['좋아하는 일본 인플루언서', '인플루언서 마케팅 운영 방식'].includes(microTopic);
+  const isPerformance = ['Meta 광고 소재 성과 분석', 'CPA 개선 경험', '실패한 소재와 개선 과정', '광고 소재 자동화/업무효율화'].includes(microTopic);
+
+  return {
+    mode,
+    category: '비즈니스/면접',
+    microTopic,
+    timeFrame: isBasicInterview
+      ? '현재 면접 상황'
+      : randomFrom(isInfluencer
+        ? ['현재 면접 상황', '신규 캠페인 기획 단계', '인플루언서 협업 전']
+        : isPerformance
+          ? ['현재 면접 상황', '성과가 떨어진 직후', '광고 소재 테스트 후']
+          : ['현재 면접 상황', '입사 후 3개월', '신규 캠페인 기획 단계', '성과가 떨어진 직후', '광고 소재 테스트 후', '인플루언서 협업 전']),
+    perspective: isBasicInterview
+      ? randomFrom(['지원자', '면접관'])
+      : randomFrom(isInfluencer
+        ? ['지원자', '면접관', '마케팅 팀 리더', '일본 인플루언서', '한국 브랜드 담당자']
+        : ['지원자', '면접관', '마케팅 팀 리더', '일본 소비자', '한국 브랜드 담당자']),
+    thinkingAngle: isBasicInterview
+      ? randomFrom(['구체적 사례', '성과 설명', '우선순위 판단', '입사 후 기여'])
+      : randomFrom(['구체적 사례', '문제해결', '비교', '성과 설명', '우선순위 판단', '리스크 대응', '인사이트 도출', '실행 프로세스 설명']),
+    emotion: randomFrom(['자신감', '솔직함', '책임감', '긴장감', '성장 의지']),
+    audience: randomFrom(BIZ_AUDIENCES),
+    resumeProof: randomFrom(BIZ_RESUME_PROOFS),
+    context: randomFrom(BIZ_CONTEXTS)
+  };
+}
+
 function getRecentTopicSeeds() {
   try {
     return JSON.parse(localStorage.getItem(RECENT_TOPIC_KEY) || '[]');
@@ -711,7 +824,7 @@ function saveRecentTopicSeed(seed) {
 }
 
 function topicSignature(seed) {
-  return [seed.mode, seed.category, seed.microTopic, seed.perspective, seed.thinkingAngle].join('|');
+  return [seed.mode, seed.category, seed.microTopic, seed.timeFrame, seed.perspective, seed.thinkingAngle].join('|');
 }
 
 function pickFreeCategory() {
@@ -721,28 +834,21 @@ function pickFreeCategory() {
 
 function createTopicSeed(mode) {
   if (mode === 'biz') {
-    return {
-      mode,
-      category: '비즈니스/면접',
-      microTopic: randomFrom(BIZ_TOPIC_POOL),
-      timeFrame: randomFrom(['현재 면접 상황', '입사 후 3개월', '신규 캠페인 기획 단계', '성과가 떨어진 직후', '광고 소재 테스트 후', '인플루언서 협업 전']),
-      perspective: randomFrom(['지원자', '면접관', '마케팅 팀 리더', '일본 소비자', '일본 인플루언서', '한국 브랜드 담당자']),
-      thinkingAngle: randomFrom(['구체적 사례', '문제해결', '비교', '성과 설명', '우선순위 판단', '리스크 대응', '인사이트 도출', '실행 프로세스 설명']),
-      emotion: randomFrom(['자신감', '솔직함', '책임감', '긴장감', '성장 의지']),
-      audience: randomFrom(BIZ_AUDIENCES),
-      resumeProof: randomFrom(BIZ_RESUME_PROOFS),
-      context: randomFrom(BIZ_CONTEXTS)
-    };
+    return createBizTopicSeed(mode);
   }
 
   const category = pickFreeCategory();
+  const microTopic = randomFrom(TOPIC_POOL[category]);
+  const time = pickTimeFrame(category, microTopic);
+  const perspective = pickPerspective(category);
   return {
     mode,
     category,
-    microTopic: randomFrom(TOPIC_POOL[category]),
-    timeFrame: randomFrom(TIME_FRAMES),
-    perspective: randomFrom(PERSPECTIVES),
-    thinkingAngle: randomFrom(THINKING_ANGLES),
+    microTopic,
+    timeFrame: time.label,
+    timeType: time.type,
+    perspective,
+    thinkingAngle: pickThinkingAngle(time.type, perspective),
     emotion: randomFrom(EMOTIONS)
   };
 }
@@ -788,7 +894,7 @@ function buildTopicPrompt(seed) {
 {"jp":"면접/업무 질문(격식체, 60자 이내)","ko":"한국어번역","hint":"답변 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"}]}`;
   }
 
-  return `아래 요소를 반드시 모두 반영해서 일본어 즉흥 발화 연습 질문 1개를 만들어줘.
+  return `아래 요소를 바탕으로 일본어 즉흥 발화 연습 질문 1개를 만들어줘.
 
 카테고리: ${seed.category}
 시간축: ${seed.timeFrame}
@@ -799,9 +905,12 @@ function buildTopicPrompt(seed) {
 
 규칙:
 - Claude가 새로운 주제를 고르지 말고 위 요소만 조합할 것
-- 질문 안에 세부주제와 관점이 자연스럽게 드러나야 함
-- 너무 일반적인 질문 금지
-- N2~N1 수준, 실제 일본 20~30대가 말할 법한 자연스러운 질문형
+- 질문에는 세부주제와 가장 중요한 축 1~2개만 자연스럽게 반영할 것
+- 나머지 축은 억지로 질문에 넣지 말고 hint에 자연스럽게 반영할 것
+- N2~N1 수준의 일본어 팟캐스트 진행자가 청취자에게 던지는 질문처럼 쓸 것
+- 기본은 구어체에 가깝게, 귀로 들어도 바로 이해되게 쓸 것
+- 어려운 표현은 주제가 요구할 때만 사용할 것
+- 뉴스 사설체나 논문체처럼 딱딱한 표현보다 자연스러운 말투를 우선할 것
 - 본인 의견을 3분 말할 수 있는 질문으로 만들 것
 - jp는 60자 이내
 - hint에는 3분 동안 말할 수 있는 답변 흐름을 한국어로 알려줄 것
