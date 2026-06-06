@@ -618,9 +618,10 @@ async function generateTopic(mode) {
   wordsCard.style.display = 'none';
   regenBtn.classList.add('loading');
 
+  const randomSeed = Math.floor(Math.random() * 10000);
   const catHint = mode==='free' && selectedCat!=='🎲 랜덤' ? `카테고리: ${selectedCat}` : '';
   const systemPrompt = mode==='free'
-    ? `아래 목록에서 랜덤으로 하나 골라 주제를 만들어줘. 반드시 매번 다른 번호를 선택할 것: 1.정치/사회이슈 2.경제/돈 3.음식/맛집 4.여행/장소 5.스포츠/운동 6.연애/인간관계 7.테크/AI 8.환경/미래 9.문화/예술 10.인생관/가치관 11.취미/일상 12.세계뉴스. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
+    ? `(seed:${randomSeed})아래 목록에서 랜덤으로 하나 골라 주제를 만들어줘. 반드시 매번 다른 번호를 선택할 것: 1.정치/사회이슈 2.경제/돈 3.음식/맛집 4.여행/장소 5.스포츠/운동 6.연애/인간관계 7.테크/AI 8.환경/미래 9.문화/예술 10.인생관/가치관 11.취미/일상 12.세계뉴스. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
 ${catHint ? catHint+' 테마로 주제를 만들어주세요.' : '정치/경제/사회/세계/스포츠/문화/여행/취미/삶/테크/연애/음식 중 랜덤으로 선택하세요.'}
 반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
 {"jp":"일본어 주제(질문형)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`
