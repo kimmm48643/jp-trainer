@@ -618,17 +618,19 @@ async function generateTopic(mode) {
   wordsCard.style.display = 'none';
   regenBtn.classList.add('loading');
 
-  const randomSeed = Math.floor(Math.random() * 10000);
-  const catHint = mode==='free' && selectedCat!=='🎲 랜덤' ? `카테고리: ${selectedCat}` : '';
+  const freeTopics = ['정치/사회이슈','경제/돈','음식/맛집','여행/장소','스포츠/운동','연애/인간관계','환경/미래','문화/예술','인생관/가치관','취미/일상','세계뉴스','라이프스타일','테크/가젯'];
+  const bizTopics = ['자기소개/경력요약','지원동기/회사선택이유','한국vs일본시장차이','앞으로하고싶은마케팅','주목한마케팅레퍼런스','강점/약점','성과/실적','실패경험','팀워크/갈등해결','커리어비전','업무스타일','트러블슈팅'];
+  const catHint = mode==='free' && selectedCat!=='🎲 랜덤' ? selectedCat : '';
+  const pickedFree = catHint || freeTopics[Math.floor(Math.random() * freeTopics.length)];
+  const pickedBiz = bizTopics[Math.floor(Math.random() * bizTopics.length)];
   const systemPrompt = mode==='free'
-    ? `(seed:${randomSeed})아래 목록에서 랜덤으로 하나 골라 주제를 만들어줘. 반드시 매번 다른 번호를 선택할 것: 1.정치/사회이슈 2.경제/돈 3.음식/맛집 4.여행/장소 5.스포츠/운동 6.연애/인간관계 7.테크/AI 8.환경/미래 9.문화/예술 10.인생관/가치관 11.취미/일상 12.세계뉴스. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
-${catHint ? catHint+' 테마로 주제를 만들어주세요.' : '정치/경제/사회/세계/스포츠/문화/여행/취미/삶/테크/연애/음식 중 랜덤으로 선택하세요.'}
+    ? `오늘의 주제: ${pickedFree}. 이 테마로 일본어 즉흥 발화 연습 주제를 하나 만들어줘. N2~N1 수준, 실제 일본 20~30대 구어체로, 본인 의견을 말할 수 있는 질문형으로.
 반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
-{"jp":"일본어 주제(질문형)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`
-    : `아래 유형에서 랜덤으로 하나 골라 질문을 만들어줘. 반드시 매번 다른 번호를 선택할 것: 1.자기소개 2.지원동기 3.강점/약점 4.성과/실적 5.실패경험 6.팀워크 7.커리어비전 8.업무스타일 9.시장분석 10.트러블슈팅 11.창의적기획 12.리더십. 일본 마케팅 직군 면접 준비 중인 N2~N1 수준 지원자 대상. 자연스러운 경어로.
+{"jp":"일본어 주제(질문형, 60자 이내)","ko":"한국어번역","hint":"3분 말하기 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"},{"jp":"표현","reading":"히라가나","meaning":"한국어"}]}`
+    : `오늘의 유형: ${pickedBiz}. 한국에서 일본 시장을 담당하는 마케터를 채용하는 면접 상황. N2~N1 수준, 자연스러운 경어로.
 반드시 아래 JSON만 출력하세요. 다른 텍스트 절대 금지.
-{"jp":"면접/업무 질문(격식체)","ko":"한국어번역","hint":"답변 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"}]}`;
-
+{"jp":"면접/업무 질문(격식체, 60자 이내)","ko":"한국어번역","hint":"답변 팁(한국어,1-2문장,strong태그가능)","words":[{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"},{"jp":"비즈니스표현","reading":"히라가나","meaning":"한국어"}]}`;
+  
   try {
     const res = await fetch('/.netlify/functions/claude', {
       method:'POST',
